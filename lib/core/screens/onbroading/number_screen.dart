@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../theme/app_decoration.dart';
+import '../../theme/app_theme.dart';
+
 
 class NumberScreen extends StatefulWidget {
   const NumberScreen({Key? key}) : super(key: key);
@@ -33,7 +36,7 @@ class _NumberScreenState extends State<NumberScreen> {
                   ),
                 ),
                 onPressed: () {
-                  context.go('/'); // Quay lại LoginScreen
+                  context.go('/');
                 },
               ),
             ),
@@ -44,14 +47,10 @@ class _NumberScreenState extends State<NumberScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 60), // Để lại khoảng trống cho nút "<"
-                    const Text(
+                    const SizedBox(height: 60), // khoảng trống cho nút "<"
+                    Text(
                       'My number is',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                      style: AppTheme.titleLarge20.copyWith(color: Colors.black),
                     ),
                     const SizedBox(height: 20),
                     Padding(
@@ -61,7 +60,7 @@ class _NumberScreenState extends State<NumberScreen> {
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                countryCode = '+1'; // Test change
+                                countryCode = '+1'; // test change
                               });
                             },
                             style: ElevatedButton.styleFrom(
@@ -70,15 +69,17 @@ class _NumberScreenState extends State<NumberScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
                             ),
-                            child: Text(countryCode),
+                            child: Text(
+                              countryCode,
+                              style: AppTheme.bodyMedium14.copyWith(color: Colors.black),
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: TextField(
-                              autofocus: true, // Tự động hiện bàn phím
+                              autofocus: true,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
                                 hintText: '00000000',
@@ -86,34 +87,41 @@ class _NumberScreenState extends State<NumberScreen> {
                                 contentPadding: const EdgeInsets.all(10),
                                 prefix: Text(' $countryCode - '),
                               ),
+                              style: AppTheme.bodyMedium14,
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'We will send a text with a verification code.\nMessage and data rates may apply. Learn what\nhappens when your number changes.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: AppTheme.bodySmall12.copyWith(color: Colors.grey),
                     ),
                     const SizedBox(height: 40),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push('/verification'); // Điều hướng đến VerificationScreen
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF28C82),
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(200, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+
+                    // ✅ Nút CONTINUE với gradient, border, font chữ đẹp
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: InkWell(
+                        onTap: () {
+                          context.push('/verification');
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 50,
+                          decoration: AppDecoration.createAccountButton(),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'CONTINUE',
+                            style: AppTheme.titleSmall16.copyWith(
+                              color: Colors.white,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
                         ),
                       ),
-                      child: const Text('CONTINUE'),
                     ),
                   ],
                 ),

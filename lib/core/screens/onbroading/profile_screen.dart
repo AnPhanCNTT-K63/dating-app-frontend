@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import '../../theme/app_decoration.dart';
+import '../../theme/app_theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -14,14 +18,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // 3 tab
-    _tabController.addListener(_handleTabSelection);
-  }
-
-  void _handleTabSelection() {
-    setState(() {
-      _currentTabIndex = _tabController.index;
-    });
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() => setState(() => _currentTabIndex = _tabController.index));
   }
 
   @override
@@ -36,26 +34,30 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     }
   }
 
+  void _prevTab() {
+    if (_currentTabIndex > 0) {
+      _tabController.animateTo(_currentTabIndex - 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('<'), // Tiêu đề là dấu <
+        leading: IconButton(
+          icon: Icon(_currentTabIndex == 0 ? Icons.close : Icons.arrow_back, color: Colors.grey),
+          onPressed: () => _currentTabIndex == 0 ? context.go('/') : _prevTab(),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(8), // Chiều cao của thanh tab
+          preferredSize: const Size.fromHeight(8),
           child: Row(
             children: List.generate(3, (index) {
               return Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _tabController.animateTo(index); // Chuyển tab khi nhấn
-                  },
-                  child: Container(
-                    height: 8,
-                    color: _currentTabIndex == index
-                        ? Colors.blue // Màu sáng cho tab đang chọn
-                        : Colors.grey[300], // Màu mặc định cho tab không chọn
-                  ),
+                child: Container(
+                  height: 4,
+                  color: _currentTabIndex >= index ? Colors.pink : Colors.grey[300],
                 ),
               );
             }),
@@ -64,10 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           NameTab(onContinue: _nextTab),
           BirthdayTab(onContinue: _nextTab),
-          GenderTab(onContinue: _nextTab),
+          GenderTab(onContinue: () => context.go('/home')),
         ],
       ),
     );
@@ -76,71 +79,31 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
 class NameTab extends StatelessWidget {
   final VoidCallback onContinue;
-
   const NameTab({required this.onContinue});
 
   @override
   Widget build(BuildContext context) {
-    return Center( // Căn giữa toàn bộ nội dung
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20), // Cách hai bên màn hình 20 pixel
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'My first name is',
-              style: TextStyle(
-                fontSize: 32, // Tăng kích thước chữ lên 32
-                fontWeight: FontWeight.bold,
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('My first name is', style: AppTheme.headLineLarge32),
+          const SizedBox(height: 20),
+          TextField(
+            decoration: const InputDecoration(
+              hintText: 'Enter your first name',
+              border: UnderlineInputBorder(),
             ),
-            const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your first name',
-                border: UnderlineInputBorder( // Chỉ sử dụng gạch chân
-                  borderSide: BorderSide(
-                    color: Colors.grey, // Màu gạch chân
-                    width: 1.5, // Độ dày gạch chân
-                  ),
-                ),
-                enabledBorder: UnderlineInputBorder( // Gạch chân khi không focus
-                  borderSide: BorderSide(
-                    color: Colors.grey, // Màu gạch chân
-                    width: 1.5, // Độ dày gạch chân
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder( // Gạch chân khi focus
-                  borderSide: BorderSide(
-                    color: Colors.blue, // Màu gạch chân khi focus
-                    width: 2.0, // Độ dày gạch chân khi focus
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'You have not approved in these regional variables for example.',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onContinue,
-                child: const Text('CONTINUE'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'This is how it will appear in Tinder and you will not be able to change it',
+            style: AppTheme.bodySmall12.copyWith(color: Colors.grey),
+          ),
+          const Spacer(),
+          ContinueButton(enabled: true, onPressed: onContinue),
+        ],
       ),
     );
   }
@@ -148,134 +111,137 @@ class NameTab extends StatelessWidget {
 
 class BirthdayTab extends StatelessWidget {
   final VoidCallback onContinue;
-
   const BirthdayTab({required this.onContinue});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'My birthday is',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          Text('My birthday is', style: AppTheme.headLineLarge32),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DropdownButton<String>(
-                hint: const Text('Month'),
-                items: ['January', 'February', 'March'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {},
-              ),
-              DropdownButton<String>(
-                hint: const Text('Day'),
-                items: List.generate(31, (index) => (index + 1).toString()).map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {},
-              ),
-              DropdownButton<String>(
-                hint: const Text('Year'),
-                items: List.generate(124, (index) => (2024 - index).toString()).map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {},
-              ),
+          TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9/]')),
+              LengthLimitingTextInputFormatter(10),
+              TextInputFormatter.withFunction((oldValue, newValue) {
+                String text = newValue.text;
+                if (text.length == 4 || text.length == 7) {
+                  if (!text.endsWith('/')) {
+                    text += '/';
+                  }
+                }
+                return TextEditingValue(
+                  text: text,
+                  selection: TextSelection.collapsed(offset: text.length),
+                );
+              })
             ],
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'Your age will be stable.',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onContinue,
-              child: const Text('CONTINUE'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 15),
-              ),
+            decoration: const InputDecoration(
+              hintText: 'YYYY/MM/DD',
+              border: UnderlineInputBorder(),
             ),
           ),
+          const SizedBox(height: 10),
+          Text('Your age will be public', style: AppTheme.bodySmall12.copyWith(color: Colors.grey)),
+          const Spacer(),
+          ContinueButton(enabled: true, onPressed: onContinue),
         ],
       ),
     );
   }
 }
 
-class GenderTab extends StatelessWidget {
+class GenderTab extends StatefulWidget {
   final VoidCallback onContinue;
-
   const GenderTab({required this.onContinue});
+
+  @override
+  State<GenderTab> createState() => _GenderTabState();
+}
+
+class _GenderTabState extends State<GenderTab> {
+  bool showGender = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'I am a',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          Text('I am a', style: AppTheme.headLineLarge32),
           const SizedBox(height: 20),
-          DropdownButton<String>(
-            hint: const Text('Select your gender'),
-            items: ['WOMAN', 'MAN'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {},
-          ),
-          const SizedBox(height: 10),
           Row(
             children: [
-              Checkbox(value: false, onChanged: (value) {}),
-              const Text('Privacy update on my paths'),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  ),
+                  child: const Text('WOMAN'),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  ),
+                  child: const Text('MAN'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Checkbox(value: showGender, onChanged: (value) => setState(() => showGender = value!)),
+              const Text('Show my gender on my profile')
             ],
           ),
           const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onContinue,
-              child: const Text('CONTINUE'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 15),
-              ),
+          ContinueButton(enabled: true, onPressed: widget.onContinue),
+        ],
+      ),
+    );
+  }
+}
+
+class ContinueButton extends StatelessWidget {
+  final bool enabled;
+  final VoidCallback onPressed;
+  const ContinueButton({required this.enabled, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: InkWell(
+        onTap: enabled ? onPressed : null,
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          decoration: enabled
+              ? AppDecoration.createAccountButton()
+              : BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'CONTINUE',
+            style: AppTheme.titleSmall16.copyWith(
+              color: enabled ? Colors.white : Colors.grey[600],
+              letterSpacing: 1.2,
             ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -65,11 +65,6 @@ class AppDecoration {
   }
 
 
-
-
-
-
-
   // Selected/active state decorations
   static ShapeDecoration selectedGradientBorder({
     required Gradient containerGradient,
@@ -91,15 +86,30 @@ class AppDecoration {
   }
 
 
-
   //cái mình sài nè
+  // deco button thứ đăng nhập
   static BoxDecoration createAccountButton() {
     return roundedContainer(
       radius: 30.0,
       gradient: AppGradientTokens.pinkToOrangeGradient,
+
+      border: Border.all(
+        color: Colors.white,
+        width: 2,
+      ),
+    );
+  }
+// deco màu buton màn hình ban đầu
+  static BoxDecoration socialButton() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(30),
+      border: Border.all(color: Colors.black12),
     );
   }
 }
+
+
 
 class GradientBorderWithClip extends ShapeBorder {
   final LinearGradient gradient;

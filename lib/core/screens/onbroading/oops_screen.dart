@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../theme/app_decoration.dart';
+import '../../theme/app_theme.dart';
+
 class OopsScreen extends StatelessWidget {
   const OopsScreen({Key? key}) : super(key: key);
 
@@ -9,9 +12,11 @@ class OopsScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: Colors.white,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Stack(
           children: [
-            // Nút "<" ở góc trên cùng bên trái
+            // Nút back "<"
             Positioned(
               top: 15,
               left: 1,
@@ -34,87 +39,54 @@ class OopsScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 60), // Để lại khoảng trống cho nút "<"
-                  // Logo Tinder (hình ngọn lửa)
+                  const SizedBox(height: 60),
+
+                  // 🔥 Logo Tinder
                   const Icon(
                     Icons.local_fire_department,
                     size: 50,
                     color: Colors.pink,
                   ),
                   const SizedBox(height: 20),
-                  // Tiêu đề "Oops!"
-                  const Text(
+
+                  // Tiêu đề
+                  Text(
                     'Oops!',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: AppTheme.headLineLarge32.copyWith(color: Colors.black),
                   ),
                   const SizedBox(height: 20),
-                  // Thông báo
-                  const Text(
+
+                  // Nội dung thông báo
+                  Text(
                     'We couldn\'t find a Tinder account\nconnected to that Facebook Account.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: AppTheme.bodyLarge16.copyWith(color: Colors.grey),
                   ),
                   const SizedBox(height: 40),
-                  // Nút "CREATE NEW ACCOUNT" với gradient text
-                  Container(
-                    width: 200,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFF28C82),
-                          Color(0xFFFFD54F)
-                        ], // Gradient từ hồng cam sang vàng
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Thêm logic tạo tài khoản mới tại đây
+
+                  // ✅ Nút "CREATE NEW ACCOUNT" dùng AppDecoration + AppTheme
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: InkWell(
+                      onTap: () {
+                        // TODO: Thêm logic tạo tài khoản mới tại đây
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                        Colors.transparent, // Loại bỏ màu nền mặc định
-                        shadowColor: Colors.transparent, // Loại bỏ shadow
-                        foregroundColor:
-                        Colors.white, // Màu chữ mặc định (sẽ bị ghi đè bởi ShaderMask)
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: ShaderMask(
-                        blendMode: BlendMode.srcIn,
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            Color(0xFFF28C82),
-                            Color(0xFFFFD54F)
-                          ], // Gradient cho chữ
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ).createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                        child: const Text(
+                      child: Container(
+                        width: 250,
+                        height: 63,
+                        decoration: AppDecoration.createAccountButton(),
+                        alignment: Alignment.center,
+                        child: Text(
                           'CREATE NEW ACCOUNT',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white, // Màu base cho gradient
+                          style: AppTheme.titleExtraSmall14.copyWith(
+                            color: Colors.white,
+                            letterSpacing: 1.2,
                           ),
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 20),
                 ],
               ),
