@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../routes/router.dart';
+import '../core/routes/router.dart';
 
-import '../screens/login_screen.dart';  // Import file login.dart
+import '../core/screens/login_screen.dart';  // Import file login.dart
 
 void main() {
   runApp(const MyApp());
