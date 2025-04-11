@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../token/gradient_tokens.dart';
+import '../token/border_radius_tokens.dart';
+import '../theme/app_colors.dart';
+
 // đây là nơi để chứa định dạng các deco
 class AppDecoration {
   const AppDecoration._();
@@ -107,7 +110,23 @@ class AppDecoration {
       border: Border.all(color: Colors.black12),
     );
   }
+  static BoxDecoration genderUnselected() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
+      border: Border.all(color: AppColors.neutralGray600, width: 1),
+      color: AppColors.primaryWhite,
+    );
+  }
+  static BoxDecoration genderSelected() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
+      color: AppColors.redRed400,
+      border: Border.all(color: AppColors.redRed600, width: 2),
+    );
+  }
 }
+
+
 
 
 

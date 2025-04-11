@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../theme/app_decoration.dart';
 import '../../theme/app_theme.dart';
-
+import '../../token/padding_tokens.dart';
+import '../../token/border_radius_tokens.dart';
+import '../../theme/app_colors.dart';
 
 class NumberScreen extends StatefulWidget {
   const NumberScreen({Key? key}) : super(key: key);
@@ -19,20 +21,18 @@ class _NumberScreenState extends State<NumberScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: AppColors.primaryWhite,
+        padding: EdgeInsets.symmetric(horizontal: AppPaddingTokens.paddingLg),
         child: Stack(
           children: [
-            // Nút "<" ở góc trên cùng bên trái
             Positioned(
-              top: 0,
-              left: 0,
+              top: AppPaddingTokens.paddingXl,
+              left: AppPaddingTokens.paddingLg,
               child: IconButton(
-                icon: const Text(
+                icon: Text(
                   '<',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                  style: AppTheme.titleLarge20.copyWith(
+                    color: AppColors.neutralGray600,
                   ),
                 ),
                 onPressed: () {
@@ -40,91 +40,82 @@ class _NumberScreenState extends State<NumberScreen> {
                 },
               ),
             ),
-            // Nội dung chính
             Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 60), // khoảng trống cho nút "<"
-                    Text(
-                      'My number is',
-                      style: AppTheme.titleLarge20.copyWith(color: Colors.black),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                countryCode = '+1'; // test change
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey[200],
-                              foregroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                            ),
-                            child: Text(
-                              countryCode,
-                              style: AppTheme.bodyMedium14.copyWith(color: Colors.black),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              autofocus: true,
-                              keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(
-                                hintText: '00000000',
-                                border: const OutlineInputBorder(),
-                                contentPadding: const EdgeInsets.all(10),
-                                prefix: Text(' $countryCode - '),
-                              ),
-                              style: AppTheme.bodyMedium14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'We will send a text with a verification code.\nMessage and data rates may apply. Learn what\nhappens when your number changes.',
-                      textAlign: TextAlign.center,
-                      style: AppTheme.bodySmall12.copyWith(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 40),
-
-                    // ✅ Nút CONTINUE với gradient, border, font chữ đẹp
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: InkWell(
-                        onTap: () {
-                          context.push('/verification');
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 60),
+                  Text(
+                    'My number is',
+                    style: AppTheme.titleLarge20.copyWith(color: AppColors.primaryBlack),
+                  ),
+                  const SizedBox(height: AppPaddingTokens.paddingMd),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            countryCode = '+1';
+                          });
                         },
-                        child: Container(
-                          width: 200,
-                          height: 50,
-                          decoration: AppDecoration.createAccountButton(),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'CONTINUE',
-                            style: AppTheme.titleSmall16.copyWith(
-                              color: Colors.white,
-                              letterSpacing: 1.2,
-                            ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.neutral200,
+                          foregroundColor: AppColors.primaryBlack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusSmall),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppPaddingTokens.paddingMd,
+                          ),
+                        ),
+                        child: Text(
+                          countryCode,
+                          style: AppTheme.bodyMedium14.copyWith(color: AppColors.primaryBlack),
+                        ),
+                      ),
+                      const SizedBox(width: AppPaddingTokens.paddingSm),
+                      Expanded(
+                        child: TextField(
+                          autofocus: true,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            hintText: '00000000',
+                            border: const OutlineInputBorder(),
+                            contentPadding: EdgeInsets.all(AppPaddingTokens.paddingSm),
+                            prefix: Text(' $countryCode - '),
+                          ),
+                          style: AppTheme.bodyMedium14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppPaddingTokens.paddingMd),
+                  Text(
+                    'We will send a text with a verification code.\nMessage and data rates may apply. Learn what\nhappens when your number changes.',
+                    textAlign: TextAlign.center,
+                    style: AppTheme.bodySmall12.copyWith(color: AppColors.neutralGray600),
+                  ),
+                  const SizedBox(height: AppPaddingTokens.paddingXl),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
+                    child: InkWell(
+                      onTap: () => context.push('/verification'),
+                      child: Container(
+                        width: 200,
+                        height: 50,
+                        decoration: AppDecoration.createAccountButton(),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'CONTINUE',
+                          style: AppTheme.titleSmall16.copyWith(
+                            color: AppColors.primaryWhite,
+                            letterSpacing: 1.2,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

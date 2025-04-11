@@ -120,6 +120,7 @@ class AppColors {
 
   //Purple Color
   static const purplePurple600 = Color(0xFF9F32F2); //TODO:BANG_DX:Add purple colors
+  static const neutralGray400 = Color(0xFF9CA3AF);
 
   static Color getPlayerColor(int index) {
     return _playerColor[index % _playerColor.length];

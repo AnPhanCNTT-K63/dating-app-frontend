@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../theme/app_decoration.dart';
 import '../../theme/app_theme.dart';
+import '../../theme/app_colors.dart';
+import '../../token/padding_tokens.dart';
+import '../../token/border_radius_tokens.dart';
 
 class OopsScreen extends StatelessWidget {
   const OopsScreen({Key? key}) : super(key: key);
@@ -11,62 +14,48 @@ class OopsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: AppColors.primaryWhite,
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: AppPaddingTokens.paddingLg),
         child: Stack(
           children: [
-            // Nút back "<"
             Positioned(
-              top: 15,
-              left: 1,
+              top: AppPaddingTokens.paddingLg,
+              left: AppPaddingTokens.paddingXs,
               child: IconButton(
-                icon: const Text(
+                icon: Text(
                   '<',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
+                  style: AppTheme.titleLarge20.copyWith(color: AppColors.neutralGray600),
                 ),
                 onPressed: () {
-                  context.go('/'); // Quay lại LoginScreen
+                  context.go('/');
                 },
               ),
             ),
-            // Nội dung chính
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 60),
-
-                  // 🔥 Logo Tinder
+                  const SizedBox(height: AppPaddingTokens.paddingXl),
                   const Icon(
                     Icons.local_fire_department,
                     size: 50,
-                    color: Colors.pink,
+                    color: AppColors.redRed400,
                   ),
-                  const SizedBox(height: 20),
-
-                  // Tiêu đề
+                  const SizedBox(height: AppPaddingTokens.paddingMd),
                   Text(
                     'Oops!',
-                    style: AppTheme.headLineLarge32.copyWith(color: Colors.black),
+                    style: AppTheme.headLineLarge32.copyWith(color: AppColors.primaryBlack),
                   ),
-                  const SizedBox(height: 20),
-
-                  // Nội dung thông báo
+                  const SizedBox(height: AppPaddingTokens.paddingMd),
                   Text(
                     'We couldn\'t find a Tinder account\nconnected to that Facebook Account.',
                     textAlign: TextAlign.center,
-                    style: AppTheme.bodyLarge16.copyWith(color: Colors.grey),
+                    style: AppTheme.bodyLarge16.copyWith(color: AppColors.neutralGray600),
                   ),
-                  const SizedBox(height: 40),
-
-                  // ✅ Nút "CREATE NEW ACCOUNT" dùng AppDecoration + AppTheme
+                  const SizedBox(height: AppPaddingTokens.paddingXl),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
                     child: InkWell(
                       onTap: () {
                         // TODO: Thêm logic tạo tài khoản mới tại đây
@@ -79,15 +68,14 @@ class OopsScreen extends StatelessWidget {
                         child: Text(
                           'CREATE NEW ACCOUNT',
                           style: AppTheme.titleExtraSmall14.copyWith(
-                            color: Colors.white,
+                            color: AppColors.primaryWhite,
                             letterSpacing: 1.2,
                           ),
                         ),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 20),
+                  const SizedBox(height: AppPaddingTokens.paddingLg),
                 ],
               ),
             ),
