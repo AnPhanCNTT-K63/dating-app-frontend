@@ -126,10 +126,6 @@ class AppDecoration {
   }
 }
 
-
-
-
-
 class GradientBorderWithClip extends ShapeBorder {
   final LinearGradient gradient;
   final double width;
