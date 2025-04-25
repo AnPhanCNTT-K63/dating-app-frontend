@@ -1,17 +1,18 @@
+import 'package:app/core/screens/profiles_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../screens/login_screen.dart';
-import '../screens/onbroading/oops_screen.dart';
-import '../screens/onbroading/number_screen.dart';
-import '../screens/onbroading/verification_screen.dart';
-import '../screens/onbroading/profile_screen.dart';
 
+import '../screens/login_screen.dart';
+import '../screens/onbroading/number_screen.dart';
+import '../screens/onbroading/oops_screen.dart';
+import '../screens/onbroading/profile_screen.dart';
+import '../screens/onbroading/verification_screen.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) =>  LoginScreen(),
+      builder: (context, state) =>  TinderProfilePage(),
     ),
     GoRoute(
       path: '/oops',
