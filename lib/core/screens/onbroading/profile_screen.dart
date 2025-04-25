@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/app_decoration.dart';
 import '../../theme/app_theme.dart';
@@ -322,8 +324,8 @@ class PhotoTab extends StatefulWidget {
 class _PhotoTabState extends State<PhotoTab> {
   final List<String?> photos = List.generate(6, (index) => null);
 
-  void _pickPhoto(int index) {
-    setState(() => photos[index] = 'asset://dummy_photo_$index.jpg');
+  void _addPhoto(int index, String path) {
+    setState(() => photos[index] = path);
   }
 
   void _removePhoto(int index) {
@@ -354,7 +356,7 @@ class _PhotoTabState extends State<PhotoTab> {
                 mainAxisSpacing: 12,
               ),
               itemBuilder: (context, index) {
-                final image = photos[index];
+                final imagePath = photos[index];
                 return Stack(
                   children: [
                     Container(
@@ -363,30 +365,27 @@ class _PhotoTabState extends State<PhotoTab> {
                         color: AppColors.neutralGray200,
                       ),
                       alignment: Alignment.center,
-                      child: image != null
+                      child: imagePath != null
                           ? ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset('assets/mock_photo.jpg', fit: BoxFit.cover),
+                        child: Image.file(
+                          File(imagePath),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
                       )
-                      : IconButton(
+                          : IconButton(
                         onPressed: () {
                           showPhotoPickerSheet(
                             context,
-                            onCameraTap: () {
-                              Navigator.of(context).pop();
-                              _pickPhoto(index);
-                            },
-                            onGalleryTap: () {
-                              Navigator.of(context).pop();
-                              _pickPhoto(index);
-                            },
+                            onImagePicked: (file) => _addPhoto(index, file.path),
                           );
                         },
                         icon: Icon(Icons.add, color: AppColors.redRed400),
                       ),
-
                     ),
-                    if (image != null)
+                    if (imagePath != null)
                       Positioned(
                         top: 4,
                         right: 4,
@@ -411,6 +410,8 @@ class _PhotoTabState extends State<PhotoTab> {
     );
   }
 }
+
+
 
 class ContinueButton extends StatelessWidget {
   final bool enabled;

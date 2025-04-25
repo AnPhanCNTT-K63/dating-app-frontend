@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "http://localhost:3000";
-
+  static const String baseUrl = "https://dating-app-api-h6tc.onrender.com/api";
+  // static const String baseUrl = "http://localhost:3000";
   Future<Map<String, dynamic>> test() async {
     final url = Uri.parse("$baseUrl/");
 
