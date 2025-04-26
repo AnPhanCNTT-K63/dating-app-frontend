@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'package:app/apis/services/auth_service.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../core/icons/app_icons.dart';
 import '../theme/app_decoration.dart';
@@ -9,7 +14,8 @@ import '../token/padding_tokens.dart';
 import '../token/border_radius_tokens.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+   LoginScreen({Key? key}) : super(key: key);
+  final AuthService _authService = AuthService();
 
   Widget _buildSignInButton({
     required Widget icon,
@@ -76,7 +82,23 @@ class LoginScreen extends StatelessWidget {
             _buildSignInButton(
               icon: AppIcons.googleLogo(height: 24),
               label: 'Sign in with Google',
-              onTap: () => context.go('/oops'),
+              onTap: () async {
+                final GoogleSignIn _googleSignIn = GoogleSignIn();
+                try {
+                  final GoogleSignInAccount? account = await _googleSignIn.signIn();
+                  if (account == null) {
+                    return;
+                  }
+                  final GoogleSignInAuthentication auth = await account.authentication;
+
+                  final idToken = auth.idToken;
+                 await _authService.loginGoogle(idToken!);
+
+                } catch (e) {
+                  print('Google Sign-In error: $e');
+                }
+              },
+
             ),
             const SizedBox(height: 12),
             _buildSignInButton(
@@ -88,7 +110,8 @@ class LoginScreen extends StatelessWidget {
             _buildSignInButton(
               icon: const Icon(Icons.phone, size: 24, color: AppColors.primaryBlack),
               label: 'Sign in with phone number',
-              onTap: () => context.go('/number'),
+             // onTap: () => context.go('/oops'),
+              onTap: () => context.go('/ready'),
             ),
             const SizedBox(height: AppPaddingTokens.paddingMd),
             TextButton(

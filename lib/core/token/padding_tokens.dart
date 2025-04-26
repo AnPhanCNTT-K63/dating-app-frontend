@@ -2,6 +2,7 @@ class AppPaddingTokens {
   const AppPaddingTokens._();
 
   static const double paddingNone = 0.0;
+  static const double paddingXXs=0.2;
   static const double paddingXs = 4.0;
   static const double paddingSm = 8.0;
   static const double paddingM = 12.0;

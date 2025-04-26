@@ -5,13 +5,14 @@ import '../screens/onbroading/oops_screen.dart';
 import '../screens/onbroading/number_screen.dart';
 import '../screens/onbroading/verification_screen.dart';
 import '../screens/onbroading/profile_screen.dart';
-
+import '../screens/onbroading/welcome_screens.dart';
+import '../screens/onbroading/ready_screen.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) =>  LoginScreen(),
     ),
     GoRoute(
       path: '/oops',
@@ -29,6 +30,14 @@ final GoRouter _router = GoRouter(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
     ),
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) =>WelcomeScreen(),
+    ),
+    GoRoute(
+      path: '/ready',
+      builder: (context, state) =>GetReadyScreen(),
+    ) ,
   ],
 );
 

@@ -23,9 +23,10 @@ class OopsScreen extends StatelessWidget {
               top: AppPaddingTokens.paddingLg,
               left: AppPaddingTokens.paddingXs,
               child: IconButton(
-                icon: Text(
-                  '<',
-                  style: AppTheme.titleLarge20.copyWith(color: AppColors.neutralGray600),
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.neutralGray600,
+                  size: 20,
                 ),
                 onPressed: () {
                   context.go('/');
