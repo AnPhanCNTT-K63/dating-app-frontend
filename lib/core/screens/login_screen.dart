@@ -111,7 +111,7 @@ class LoginScreen extends StatelessWidget {
               icon: const Icon(Icons.phone, size: 24, color: AppColors.primaryBlack),
               label: 'Sign in with phone number',
              // onTap: () => context.go('/oops'),
-              onTap: () => context.go('/ready'),
+              onTap: () => context.go('/user-profile'),
             ),
             const SizedBox(height: AppPaddingTokens.paddingMd),
             TextButton(

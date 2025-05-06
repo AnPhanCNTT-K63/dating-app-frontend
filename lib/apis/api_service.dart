@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
   final Dio dio = Dio(BaseOptions(
-    baseUrl: "http://10.0.2.2:3000/api/",
+    baseUrl: "https://dating-app-api-h6tc.onrender.com/api/",
     connectTimeout: const Duration(seconds: 15),
     receiveTimeout: const Duration(seconds: 15),
     headers: {

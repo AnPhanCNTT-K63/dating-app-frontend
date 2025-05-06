@@ -4,6 +4,8 @@ import '../../theme/app_decoration.dart';
 import '../../token/border_radius_tokens.dart';
 import 'package:app/widgets/custom_bottom_nav_bar.dart';
 
+import 'package:app/core/icons/app_icons.dart';
+
 // Import nav bar vừa tách
 
 class GetReadyScreen extends StatelessWidget {
@@ -24,7 +26,7 @@ class GetReadyScreen extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/your_background.jpg'), // TODO: chỉnh đường dẫn ảnh
+                      image: AppIcons.backgroundImageProvider(),
                       fit: BoxFit.cover,
                     ),
                   ),
