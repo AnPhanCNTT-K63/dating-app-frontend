@@ -28,7 +28,7 @@ class _TinderHomeScreenState extends State<TinderHomeScreen> {
           // Card stack takes most of the screen space
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               child: ProfileCardStack(),
             ),
           ),
@@ -393,8 +393,8 @@ class _ProfileCardState extends State<ProfileCard> with SingleTickerProviderStat
     // Calculate card dimensions based on screen size
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double cardWidth = screenWidth - 32;
-    double cardHeight = screenHeight * 0.5;
+    double cardWidth = screenWidth - 32 ;
+    double cardHeight = screenHeight * 0.75;
 
     return Column(
       children: [
@@ -516,102 +516,95 @@ class _ProfileCardState extends State<ProfileCard> with SingleTickerProviderStat
               ),
             ),
 
-          // Profile Info at bottom of card
-          _buildProfileInfo(),
-        ],
-      ),
-    );
-  }
-
-  // Profile information at bottom of card
-  Widget _buildProfileInfo() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Name, age and info button
-            Row(
+          // Profile Info at bottom of card (FIXED - moved to bottom)
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.name,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  "${widget.age}",
-                  style: const TextStyle(
-                    fontSize: 32,
-                    color: Colors.white,
-                  ),
-                ),
-                const Spacer(),
-                // Info button
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.info_outline,
-                      color: Colors.grey,
-                      size: 18,
+                // Name, age and info button
+                Row(
+                  children: [
+                    Text(
+                      widget.name,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 4),
+                    Text(
+                      "${widget.age}",
+                      style: const TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    // Info button
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                // Location info
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.location,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                // Distance info
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.place_outlined,
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.distance,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 4),
-            // Location info
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  color: Colors.white,
-                  size: 14,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.location,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 2),
-            // Distance info
-            Row(
-              children: [
-                const Icon(
-                  Icons.place_outlined,
-                  color: Colors.white,
-                  size: 14,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.distance,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -619,7 +612,7 @@ class _ProfileCardState extends State<ProfileCard> with SingleTickerProviderStat
   // Action buttons row (rewind, dislike, super like, like, boost)
   Widget _buildActionButtons() {
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
+      padding: const EdgeInsets.only(top: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
