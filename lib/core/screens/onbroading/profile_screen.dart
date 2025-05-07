@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       print('Submitting profile: ${_userProfile.toJson()}');
 
       // Navigate to home on success
-      context.go('/home');
+      context.go('/ready');
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             _currentTabIndex == 0 ? Icons.close : Icons.arrow_back,
             color: AppColors.neutralGray600,
           ),
-          onPressed: () => _currentTabIndex == 0 ? context.go('/') : _prevTab(),
+          onPressed: () => _currentTabIndex == 0 ? context.go('/RegisterScreen') : _prevTab(),
         ),
         backgroundColor: AppColors.primaryWhite,
         elevation: 0,
@@ -148,9 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
           PhotoTab(
             onContinue: _submitProfile,
+
             onPhotosChanged:
                 (photos) => setState(() => _userProfile.photos = photos),
             initialPhotos: _userProfile.photos,
+
           ),
         ],
       ),

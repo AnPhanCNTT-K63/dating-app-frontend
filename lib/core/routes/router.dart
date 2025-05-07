@@ -1,4 +1,4 @@
-import 'package:app/core/screens/profiles_screen.dart';
+import 'package:app/core/screens/profiles_screen_account.dart';
 import 'package:app/core/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +20,7 @@ final GoRouter _router = GoRouter(
     // ),
     GoRoute(
       path: '/',
-      builder: (context, state) =>  TinderHomeScreen(),
+      builder: (context, state) =>  ProfileScreen(),
     ),
     GoRoute(
       path: '/RegisterScreen',
@@ -38,10 +38,12 @@ final GoRouter _router = GoRouter(
       path: '/verification',
       builder: (context, state) => const VerificationScreen(),
     ),
+    //trang danh cho thông tin tài khoản khi tạo tài khoản
     GoRoute(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
     ),
+    // trang thông tin account
     GoRoute(
       path: '/user-profile',
       builder: (context, state) => TinderProfilePage(),

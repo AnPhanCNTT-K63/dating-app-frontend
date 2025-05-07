@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      // final response = await _authService.register(...);
+      final response = await _authService.register(_nameController.text,_emailController.text,_passwordController.text );
       context.go('/profile');
     }
   }

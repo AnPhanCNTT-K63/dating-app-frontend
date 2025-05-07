@@ -49,7 +49,7 @@ class CustomBottomNavBar extends StatelessWidget {
             context.go('/settings'); // Chuyển tới trang Settings
             break;
           case 4:
-            context.go('/notifications'); // Chuyển tới trang Notifications
+            context.go('/user-profile'); // Chuyển tới trang Notifications
             break;
         }
         onItemTapped?.call(index); // Nếu có callback từ bên ngoài, gọi lại

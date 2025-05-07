@@ -104,7 +104,7 @@ class LoginScreen extends StatelessWidget {
             _buildSignInButton(
               icon: AppIcons.facebookLogo(height: 24),
               label: 'Sign in with Facebook',
-              onTap: () => context.go('/oops'),
+              onTap: () => context.go('/RegisterScreen'),
             ),
             const SizedBox(height: 12),
             _buildSignInButton(

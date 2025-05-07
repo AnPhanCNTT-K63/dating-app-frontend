@@ -3,7 +3,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_decoration.dart';
 import '../../token/border_radius_tokens.dart';
 import 'package:app/widgets/custom_bottom_nav_bar.dart';
-
+import 'package:go_router/go_router.dart';
 import 'package:app/core/icons/app_icons.dart';
 
 // Import nav bar vừa tách
@@ -64,6 +64,7 @@ class GetReadyScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
                       child: InkWell(
                         onTap: () {
+                          context.go('/tinderUser');
                           // TODO: Navigate đến Tutorial
                         },
                         child: Container(
@@ -84,8 +85,8 @@ class GetReadyScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextButton(
-                      onPressed: () {
-                        // TODO: Skip tutorial
+                      onPressed: ()  {
+
                       },
                       child: const Text(
                         'SKIP',
@@ -105,6 +106,7 @@ class GetReadyScreen extends StatelessWidget {
             child: CustomBottomNavBar(
               selectedIndex: 0, // tab đầu tiên đang được chọn (Fire icon)
               onItemTapped: (index) {
+
                 // TODO: Xử lý chuyển trang khi tap vào tab khác
               },
             ),
