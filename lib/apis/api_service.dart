@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
   final Dio dio = Dio(BaseOptions(
-    baseUrl: "https://dating-app-api-h6tc.onrender.com/api",
+    baseUrl: dotenv.env['API_URL_DEV'] ?? "http://10.0.2.2:3000/api/",
+    // API_URL_DEV  cho backend dev chạy trên desktop
+    // API_URL_PROD  cho frontend dev chạy trên mọi thiết bị
+    // API_URL_LOCAL cho backend dev chay điện thoại
     connectTimeout: const Duration(seconds: 15),
     receiveTimeout: const Duration(seconds: 15),
     headers: {

@@ -13,7 +13,6 @@ class LoginScreen extends StatelessWidget {
    LoginScreen({Key? key}) : super(key: key);
   final AuthService _authService = AuthService();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,13 +72,14 @@ class LoginScreen extends StatelessWidget {
             buildSignInButton(
               icon: AppIcons.facebookLogo(height: 24),
               label: 'Sign in with Facebook',
-              onTap: () => context.go('/oops'),
+              onTap: () => context.go('/RegisterScreen'),
             ),
             const SizedBox(height: 12),
             buildSignInButton(
               icon: const Icon(Icons.phone, size: 24, color: AppColors.primaryBlack),
               label: 'Sign in with phone number',
-              onTap: () => context.go('/number'),
+             // onTap: () => context.go('/oops'),
+              onTap: () => context.go('/user-profile'),
             ),
             const SizedBox(height: AppPaddingTokens.paddingMd),
             TextButton(

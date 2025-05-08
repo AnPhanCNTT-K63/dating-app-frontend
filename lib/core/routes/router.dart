@@ -1,3 +1,5 @@
+import 'package:app/core/screens/profiles_screen_account.dart';
+import 'package:app/core/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/login_screen.dart';
@@ -5,7 +7,10 @@ import '../screens/onbroading/oops_screen.dart';
 import '../screens/onbroading/number_screen.dart';
 import '../screens/onbroading/verification_screen.dart';
 import '../screens/onbroading/profile_screen.dart';
+import '../screens/onbroading/welcome_screens.dart';
+import '../screens/onbroading/ready_screen.dart';
 
+import '../screens/profiles_user/profiles_user.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -13,6 +18,14 @@ final GoRouter _router = GoRouter(
       path: '/',
       builder: (context, state) =>  LoginScreen(),
     ),
+    // GoRoute(
+    //   path: '/',
+    //   builder: (context, state) =>  ProfileScreen(),
+    // ),
+    GoRoute(
+      path: '/RegisterScreen',
+      builder: (context, state) =>RegisterScreen(),
+    ) ,
     GoRoute(
       path: '/oops',
       builder: (context, state) => const OopsScreen(),
@@ -25,10 +38,31 @@ final GoRouter _router = GoRouter(
       path: '/verification',
       builder: (context, state) => const VerificationScreen(),
     ),
+    //trang danh cho thông tin tài khoản khi tạo tài khoản
     GoRoute(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
     ),
+    // trang thông tin account
+    GoRoute(
+      path: '/user-profile',
+      builder: (context, state) => TinderProfilePage(),
+    ),
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) =>WelcomeScreen(),
+    ),
+    GoRoute(
+      path: '/ready',
+      builder: (context, state) =>GetReadyScreen(),
+    ),
+
+    GoRoute(
+      path: '/tinderUser',
+      builder: (context, state) => TinderHomeScreen(),
+    ),
+
+
   ],
 );
 

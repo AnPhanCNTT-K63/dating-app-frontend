@@ -110,6 +110,7 @@ class AppDecoration {
       border: Border.all(color: Colors.black12),
     );
   }
+
   static BoxDecoration genderUnselected() {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),

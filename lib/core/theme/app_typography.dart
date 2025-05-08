@@ -51,6 +51,9 @@ TextTheme appTextTheme = TextTheme(
       fontFamily: 'OpenSans',
       fontWeight: FontWeight.w600, // SemiBold
       fontSize: 14),
+
+
+
   labelMedium: const TextStyle(
       fontFamily: 'OpenSans',
       fontWeight: FontWeight.w400, // Regular
@@ -58,5 +61,5 @@ TextTheme appTextTheme = TextTheme(
   labelSmall: const TextStyle(
       fontFamily: 'OpenSans',
       fontWeight: FontWeight.w300, // Light
-      fontSize: 10),
+      fontSize: 14),
 );
