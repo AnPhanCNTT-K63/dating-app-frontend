@@ -1,51 +1,18 @@
-import 'dart:convert';
 import 'package:app/apis/services/auth_service.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:app/widgets/signin_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../core/icons/app_icons.dart';
-import '../theme/app_decoration.dart';
 import '../theme/app_theme.dart';
 import '../theme/app_colors.dart';
 import '../token/padding_tokens.dart';
-import '../token/border_radius_tokens.dart';
 
 class LoginScreen extends StatelessWidget {
    LoginScreen({Key? key}) : super(key: key);
   final AuthService _authService = AuthService();
 
-  Widget _buildSignInButton({
-    required Widget icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 50,
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: AppPaddingTokens.paddingMd),
-          decoration: AppDecoration.socialButton(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-              const SizedBox(width: 12),
-              Text(
-                label,
-                style: AppTheme.bodyMedium14.copyWith(color: AppColors.primaryBlack),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +46,7 @@ class LoginScreen extends StatelessWidget {
               style: AppTheme.bodySmall12.copyWith(color: AppColors.neutralGray600),
             ),
             const SizedBox(height: AppPaddingTokens.paddingLg),
-            _buildSignInButton(
+            buildSignInButton(
               icon: AppIcons.googleLogo(height: 24),
               label: 'Sign in with Google',
               onTap: () async {
@@ -92,7 +59,9 @@ class LoginScreen extends StatelessWidget {
                   final GoogleSignInAuthentication auth = await account.authentication;
 
                   final idToken = auth.idToken;
-                 await _authService.loginGoogle(idToken!);
+
+                final response = await _authService.loginGoogle(idToken!);
+                print(response["data"]);
 
                 } catch (e) {
                   print('Google Sign-In error: $e');
@@ -101,13 +70,13 @@ class LoginScreen extends StatelessWidget {
 
             ),
             const SizedBox(height: 12),
-            _buildSignInButton(
+            buildSignInButton(
               icon: AppIcons.facebookLogo(height: 24),
               label: 'Sign in with Facebook',
               onTap: () => context.go('/oops'),
             ),
             const SizedBox(height: 12),
-            _buildSignInButton(
+            buildSignInButton(
               icon: const Icon(Icons.phone, size: 24, color: AppColors.primaryBlack),
               label: 'Sign in with phone number',
               onTap: () => context.go('/number'),
