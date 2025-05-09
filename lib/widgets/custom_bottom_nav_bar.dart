@@ -40,13 +40,13 @@ class CustomBottomNavBar extends StatelessWidget {
             context.go('/home'); // Chuyển tới trang Home
             break;
           case 1:
-            context.go('/search'); // Chuyển tới trang Search
+            context.go('/DiscoveryScreen'); // Chuyển tới trang DiscoveryScreen
             break;
           case 2:
-            context.go('/profile'); // Chuyển tới trang Profile
+            context.go('/likeScreen'); // Chuyển tới trang likescreen
             break;
           case 3:
-            context.go('/settings'); // Chuyển tới trang Settings
+            context.go('/settings'); // Chuyển tới trang
             break;
           case 4:
             context.go('/user-profile'); // Chuyển tới trang Notifications

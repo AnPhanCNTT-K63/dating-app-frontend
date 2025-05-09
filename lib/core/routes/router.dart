@@ -14,7 +14,9 @@ import '../screens/singIn.dart';
 
 import '../screens/profiles_user/profiles_user.dart';
 import '../screens/profiles_user/information_user.dart';
-// import '../screens/profiles_user/information_user.dart';
+import '../screens/profiles_user/likeScreen.dart';
+
+import '../screens/profiles_user/searchScreen.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -74,6 +76,14 @@ final GoRouter _router = GoRouter(
       builder: (context, state) =>UserProfileScreen(),
     ),
 
+    GoRoute(
+      path: '/likeScreen',
+      builder: (context, state) =>LikesScreen(),
+    ),
+    GoRoute(
+      path: '/DiscoveryScreen',
+      builder: (context, state) =>DiscoveryScreen(),
+    ),
 
   ],
 );
