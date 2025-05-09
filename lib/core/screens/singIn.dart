@@ -9,27 +9,46 @@ import '../theme/app_theme.dart';
 import '../token/padding_tokens.dart';
 import '../token/border_radius_tokens.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _authService = AuthService();
+  final _authService = AuthService(); //
 
   bool _obscurePassword = true;
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      final response = await _authService.register(_nameController.text,_emailController.text,_passwordController.text );
-      context.go('/profile');
+      try {
+        final response = await _authService.register(
+          'username_placeholder', // bạn nên thêm trường username
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+
+        if (response['success'] == true) {
+          context.go('/tinderUser');
+        } else {
+          _showError(response['message'] ?? 'Registration failed');
+        }
+      } catch (e) {
+        _showError('Something went wrong. Please try again.');
+      }
     }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   Widget _buildTextField({
@@ -60,12 +79,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryWhite,
       appBar: AppBar(
         backgroundColor: AppColors.primaryWhite,
-        title: const Text('TẠO TÀI KHOẢN'),
+        title: const Text('SIGN UP'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppPaddingTokens.paddingLg),
@@ -77,21 +103,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: AppPaddingTokens.paddingMd),
 
               _buildTextField(
-                controller: _nameController,
-                label: 'Name',
-                icon: Icons.person,
-                validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
-              ),
-              const SizedBox(height: AppPaddingTokens.paddingMd),
-
-              _buildTextField(
                 controller: _emailController,
                 label: 'Email',
                 icon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Please enter your email';
-                  if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Enter a valid email';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    return 'Enter a valid email';
+                  }
                   return null;
                 },
               ),
@@ -103,27 +125,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 icon: Icons.lock,
                 obscureText: _obscurePassword,
                 suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
                   onPressed: () {
                     setState(() => _obscurePassword = !_obscurePassword);
                   },
                 ),
-                validator: (value) =>
-                value == null || value.length < 6 ? 'Minimum 6 characters' : null,
+                validator: (value) {
+                  if (value == null || value.length < 6) {
+                    return 'Minimum 6 characters';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: AppPaddingTokens.paddingXxxxxxl),
 
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
                 child: InkWell(
-                  onTap: _submit, // <-- Chỉ cần thế này
+                  onTap: _submit,
                   child: Container(
                     width: 200,
                     height: 50,
                     decoration: AppDecoration.createAccountButton(),
                     alignment: Alignment.center,
                     child: Text(
-                      'ĐĂNG KÝ',
+                      'SIGN UP',
                       style: AppTheme.titleSmall16.copyWith(
                         color: AppColors.primaryWhite,
                         letterSpacing: 1.2,
@@ -132,9 +160,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-
-
-
             ],
           ),
         ),

@@ -27,7 +27,7 @@ class AppIcons {
       Image.asset('$_basePath/Star.png', height: height, width: width);
 
   static Image Search({double? height, double? width}) =>
-      Image.asset('$_basePath/Union.png', height: height, width: width);
+      Image.asset('$_basePath/Search.png', height: height, width: width);
 
   //truyen vao mot anh cho khong phair  Image widget,
   static AssetImage backgroundImageProvider() =>

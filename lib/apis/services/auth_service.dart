@@ -17,6 +17,15 @@ class AuthService {
       "fmcToken": ''
     });
 
+
+    return response;
+  }
+  Future<Map<String, dynamic>> signIn(String email, String password) async {
+    final response = await _apiService.post("auth/signin", {
+      "email": email,
+      "password": password,
+    });
+
     return response;
   }
 }

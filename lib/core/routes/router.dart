@@ -9,6 +9,8 @@ import '../screens/onbroading/verification_screen.dart';
 import '../screens/onbroading/profile_screen.dart';
 import '../screens/onbroading/welcome_screens.dart';
 import '../screens/onbroading/ready_screen.dart';
+// import '../screens/account_setting/account.dart';
+import '../screens/singIn.dart';
 
 import '../screens/profiles_user/profiles_user.dart';
 
@@ -20,7 +22,7 @@ final GoRouter _router = GoRouter(
     // ),
     GoRoute(
       path: '/',
-      builder: (context, state) =>  ProfileScreen(),
+      builder: (context, state) =>  SignUp(),
     ),
     GoRoute(
       path: '/RegisterScreen',
@@ -46,7 +48,7 @@ final GoRouter _router = GoRouter(
     // trang thông tin account
     GoRoute(
       path: '/user-profile',
-      builder: (context, state) => TinderProfilePage(),
+      builder: (context, state) =>TinderProfilePage(),
     ),
     GoRoute(
       path: '/welcome',
@@ -61,7 +63,10 @@ final GoRouter _router = GoRouter(
       path: '/tinderUser',
       builder: (context, state) => TinderHomeScreen(),
     ),
-
+    GoRoute(
+      path: '/SignUp',
+      builder: (context, state) => SignUp(),
+    ),
 
   ],
 );
