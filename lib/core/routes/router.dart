@@ -1,3 +1,4 @@
+import 'package:app/core/screens/chat_screen.dart';
 import 'package:app/core/screens/profiles_screen_account.dart';
 import 'package:app/core/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/profile',
       builder: (context, state) => ProfileScreen(),
+    ),
+    GoRoute(
+      path: '/chat',
+      builder: (context, state) => ChatScreen(),
     ),
     // trang thông tin account
     GoRoute(

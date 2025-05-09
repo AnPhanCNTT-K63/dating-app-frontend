@@ -77,6 +77,10 @@ class AuthService {
     final response = await _apiService.post("auth/google-login", {
       "token": token,
     });
+
+    if (response != null && response["data"]["accessToken"] != null) {
+      await saveToken(response["data"]["accessToken"]);
+    }
     return response;
   }
 
