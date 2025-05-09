@@ -1,16 +1,18 @@
 import 'package:app/apis/services/auth_service.dart';
+import 'package:app/providers/user_provicer.dart';
 import 'package:app/widgets/signin_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:provider/provider.dart';
 import '../../core/icons/app_icons.dart';
 import '../theme/app_theme.dart';
 import '../theme/app_colors.dart';
 import '../token/padding_tokens.dart';
 
 class LoginScreen extends StatelessWidget {
-   LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
+
   final AuthService _authService = AuthService();
 
   @override
@@ -56,17 +58,15 @@ class LoginScreen extends StatelessWidget {
                     return;
                   }
                   final GoogleSignInAuthentication auth = await account.authentication;
-
                   final idToken = auth.idToken;
-
-                final response = await _authService.loginGoogle(idToken!);
-                print(response["data"]);
-
+                  final response = await _authService.loginGoogle(idToken!);
+                  final userProvider = Provider.of<UserProvider>(context, listen: false);
+                  await userProvider.loadUserData();
+                  context.go('/tinderUser');
                 } catch (e) {
                   print('Google Sign-In error: $e');
                 }
               },
-
             ),
             const SizedBox(height: 12),
             buildSignInButton(
@@ -78,7 +78,6 @@ class LoginScreen extends StatelessWidget {
             buildSignInButton(
               icon: const Icon(Icons.phone, size: 24, color: AppColors.primaryBlack),
               label: 'Sign in with phone number',
-             // onTap: () => context.go('/oops'),
               onTap: () => context.go('/user-profile'),
             ),
             const SizedBox(height: AppPaddingTokens.paddingMd),
