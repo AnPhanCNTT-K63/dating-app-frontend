@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
             buildSignInButton(
               icon: AppIcons.facebookLogo(height: 24),
               label: 'Sign in with Facebook',
-              onTap: () => context.go('/RegisterScreen'),
+              onTap: () => context.go('/oops'),
             ),
             const SizedBox(height: 12),
             buildSignInButton(
@@ -82,7 +82,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppPaddingTokens.paddingMd),
             TextButton(
-              onPressed: () {},
+              onPressed: () { context.go('/RegisterScreen');},
               child: Text(
                 'Trouble signing in?',
                 style: AppTheme.bodySmall12.copyWith(color: AppColors.primaryWhite),

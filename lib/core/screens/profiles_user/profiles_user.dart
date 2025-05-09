@@ -37,10 +37,3 @@ class _TinderHomeScreenState extends State<TinderHomeScreen> {
     );
   }
 }
-
-
-
-
-
-
-

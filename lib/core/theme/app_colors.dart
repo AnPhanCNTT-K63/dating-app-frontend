@@ -18,11 +18,13 @@ class AppColors {
   static const neutralGray100 = Color(0xFFF6F6F6);
   static const neutralGray200 = Color(0xFFF7F7F7);
   static const neutralGray300 = Color(0xFFEDEDED); //TODO:PHUC_ND:đổi giá trị cho đúng neutralGray300(0xFFEDEDED)
+  static const neutralGray500 = Color(0xFF9E9E9E);
   static const neutralGray600 = Color(0xFFAFAFAF);
   static const neutralGray700 = Color(0xFF7B7B7B);
   static const neutralGray800 = Color(0xFF464646);
   static const neutralGray900 = Color(0xFF222222);
   static const neutralBlack950 = Color(0xFF040002);
+
 
   //NEUTRAL-WHITE
   static const neutralWhite50 = Color(0xFFFFFFFF);

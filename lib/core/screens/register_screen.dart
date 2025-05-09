@@ -61,81 +61,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryWhite,
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+        return false; // Chặn hành vi mặc định để điều khiển thủ công
+      },
+      child: Scaffold(
         backgroundColor: AppColors.primaryWhite,
-        title: const Text('Create Account'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppPaddingTokens.paddingLg),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              AppIcons.tinderLogo(height: 80),
-              const SizedBox(height: AppPaddingTokens.paddingMd),
+        appBar: AppBar(
+          backgroundColor: AppColors.primaryWhite,
+          title: const Text('TẠO TÀI KHOẢN'),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppPaddingTokens.paddingLg),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                AppIcons.tinderLogo(height: 80),
+                const SizedBox(height: AppPaddingTokens.paddingMd),
 
-              _buildTextField(
-                controller: _nameController,
-                label: 'Name',
-                icon: Icons.person,
-                validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
-              ),
-              const SizedBox(height: AppPaddingTokens.paddingMd),
+                _buildTextField(
+                  controller: _nameController,
+                  label: 'Name',
+                  icon: Icons.person,
+                  validator: (value) =>
+                  value == null || value.isEmpty ? 'Please enter your name' : null,
+                ),
+                const SizedBox(height: AppPaddingTokens.paddingMd),
 
-              _buildTextField(
-                controller: _emailController,
-                label: 'Email',
-                icon: Icons.email,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Please enter your email';
-                  if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Enter a valid email';
-                  return null;
-                },
-              ),
-              const SizedBox(height: AppPaddingTokens.paddingMd),
-
-              _buildTextField(
-                controller: _passwordController,
-                label: 'Password',
-                icon: Icons.lock,
-                obscureText: _obscurePassword,
-                suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () {
-                    setState(() => _obscurePassword = !_obscurePassword);
+                _buildTextField(
+                  controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Please enter your email';
+                    if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Enter a valid email';
+                    return null;
                   },
                 ),
-                validator: (value) =>
-                value == null || value.length < 6 ? 'Minimum 6 characters' : null,
-              ),
-              const SizedBox(height: AppPaddingTokens.paddingXxxxxxl),
+                const SizedBox(height: AppPaddingTokens.paddingMd),
 
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
-                child: InkWell(
-                  onTap: _submit, // <-- Chỉ cần thế này
-                  child: Container(
-                    width: 200,
-                    height: 50,
-                    decoration: AppDecoration.createAccountButton(),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'SIGN UP',
-                      style: AppTheme.titleSmall16.copyWith(
-                        color: AppColors.primaryWhite,
-                        letterSpacing: 1.2,
+                _buildTextField(
+                  controller: _passwordController,
+                  label: 'Password',
+                  icon: Icons.lock,
+                  obscureText: _obscurePassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
+                  ),
+                  validator: (value) =>
+                  value == null || value.length < 6 ? 'Minimum 6 characters' : null,
+                ),
+                const SizedBox(height: AppPaddingTokens.paddingXxxxxxl),
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
+                  child: InkWell(
+                    onTap: _submit,
+                    child: Container(
+                      width: 200,
+                      height: 50,
+                      decoration: AppDecoration.createAccountButton(),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'ĐĂNG KÝ',
+                        style: AppTheme.titleSmall16.copyWith(
+                          color: AppColors.primaryWhite,
+                          letterSpacing: 1.2,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-
-
-
-            ],
+              ],
+            ),
           ),
         ),
       ),

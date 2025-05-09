@@ -10,19 +10,25 @@ import '../screens/onbroading/verification_screen.dart';
 import '../screens/onbroading/profile_screen.dart';
 import '../screens/onbroading/welcome_screens.dart';
 import '../screens/onbroading/ready_screen.dart';
+// import '../screens/account_setting/account.dart';
+import '../screens/singIn.dart';
 
 import '../screens/profiles_user/profiles_user.dart';
+import '../screens/profiles_user/information_user.dart';
+import '../screens/profiles_user/likeScreen.dart';
+
+import '../screens/profiles_user/searchScreen.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) =>  LoginScreen(),
-    ),
     // GoRoute(
     //   path: '/',
-    //   builder: (context, state) =>  ProfileScreen(),
+    //   builder: (context, state) =>  LoginScreen(),
     // ),
+    GoRoute(
+      path: '/',
+      builder: (context, state) =>  TinderHomeScreen(),
+    ),
     GoRoute(
       path: '/RegisterScreen',
       builder: (context, state) =>RegisterScreen(),
@@ -51,7 +57,7 @@ final GoRouter _router = GoRouter(
     // trang thông tin account
     GoRoute(
       path: '/user-profile',
-      builder: (context, state) => TinderProfilePage(),
+      builder: (context, state) =>TinderProfilePage(),
     ),
     GoRoute(
       path: '/welcome',
@@ -66,7 +72,23 @@ final GoRouter _router = GoRouter(
       path: '/tinderUser',
       builder: (context, state) => TinderHomeScreen(),
     ),
+    GoRoute(
+      path: '/SignUp',
+      builder: (context, state) => SignUp(),
+    ),
+    GoRoute(
+      path: '/Information_user',
+      builder: (context, state) =>UserProfileScreen(),
+    ),
 
+    GoRoute(
+      path: '/likeScreen',
+      builder: (context, state) =>LikesScreen(),
+    ),
+    GoRoute(
+      path: '/DiscoveryScreen',
+      builder: (context, state) =>DiscoveryScreen(),
+    ),
 
   ],
 );

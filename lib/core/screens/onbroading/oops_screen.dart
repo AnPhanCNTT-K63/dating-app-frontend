@@ -12,75 +12,90 @@ class OopsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: AppColors.primaryWhite,
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: AppPaddingTokens.paddingLg),
-        child: Stack(
-          children: [
-            Positioned(
-              top: AppPaddingTokens.paddingLg,
-              left: AppPaddingTokens.paddingXs,
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColors.neutralGray600,
-                  size: 20,
+    return WillPopScope(
+      onWillPop: () async {
+        // Nếu có thể pop, thì pop. Nếu không, go về trang chính
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/');
+        }
+        return false; // Ngăn hành vi mặc định để tránh pop hai lần
+      },
+      child: Scaffold(
+        body: Container(
+          color: AppColors.primaryWhite,
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: AppPaddingTokens.paddingLg),
+          child: Stack(
+            children: [
+              Positioned(
+                top: AppPaddingTokens.paddingLg,
+                left: AppPaddingTokens.paddingXs,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColors.neutralGray600,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go('/');
+                    }
+                  },
                 ),
-                onPressed: () {
-                  context.go('/');
-                },
               ),
-            ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: AppPaddingTokens.paddingXl),
-                  const Icon(
-                    Icons.local_fire_department,
-                    size: 50,
-                    color: AppColors.redRed400,
-                  ),
-                  const SizedBox(height: AppPaddingTokens.paddingMd),
-                  Text(
-                    'Oops!',
-                    style: AppTheme.headLineLarge32.copyWith(color: AppColors.primaryBlack),
-                  ),
-                  const SizedBox(height: AppPaddingTokens.paddingMd),
-                  Text(
-                    'We couldn\'t find a Tinder account\nconnected to that Facebook Account.',
-                    textAlign: TextAlign.center,
-                    style: AppTheme.bodyLarge16.copyWith(color: AppColors.neutralGray600),
-                  ),
-                  const SizedBox(height: AppPaddingTokens.paddingXl),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
-                    child: InkWell(
-                      onTap: () {
-                        // TODO: Thêm logic tạo tài khoản mới tại đây
-                      },
-                      child: Container(
-                        width: 250,
-                        height: 63,
-                        decoration: AppDecoration.createAccountButton(),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'CREATE NEW ACCOUNT',
-                          style: AppTheme.titleExtraSmall14.copyWith(
-                            color: AppColors.primaryWhite,
-                            letterSpacing: 1.2,
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: AppPaddingTokens.paddingXl),
+                    const Icon(
+                      Icons.local_fire_department,
+                      size: 50,
+                      color: AppColors.redRed400,
+                    ),
+                    const SizedBox(height: AppPaddingTokens.paddingMd),
+                    Text(
+                      'Oops!',
+                      style: AppTheme.headLineLarge32.copyWith(color: AppColors.primaryBlack),
+                    ),
+                    const SizedBox(height: AppPaddingTokens.paddingMd),
+                    Text(
+                      'We couldn\'t find a Tinder account\nconnected to that Facebook Account.',
+                      textAlign: TextAlign.center,
+                      style: AppTheme.bodyLarge16.copyWith(color: AppColors.neutralGray600),
+                    ),
+                    const SizedBox(height: AppPaddingTokens.paddingXl),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppBorderRadiusTokens.borderRadiusLarge),
+                      child: InkWell(
+                        onTap: () {
+                          // TODO: Thêm logic tạo tài khoản mới tại đây
+                        },
+                        child: Container(
+                          width: 250,
+                          height: 63,
+                          decoration: AppDecoration.createAccountButton(),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'CREATE NEW ACCOUNT',
+                            style: AppTheme.titleExtraSmall14.copyWith(
+                              color: AppColors.primaryWhite,
+                              letterSpacing: 1.2,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: AppPaddingTokens.paddingLg),
-                ],
+                    const SizedBox(height: AppPaddingTokens.paddingLg),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
