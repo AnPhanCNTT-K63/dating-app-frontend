@@ -63,4 +63,12 @@ class AppTheme {
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
+  static final headLineMedium24 = GoogleFonts.nunito().copyWith(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
+  static final bodyMedium16 = GoogleFonts.nunito().copyWith(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
 }

@@ -13,6 +13,8 @@ import '../screens/onbroading/ready_screen.dart';
 import '../screens/singIn.dart';
 
 import '../screens/profiles_user/profiles_user.dart';
+import '../screens/profiles_user/information_user.dart';
+// import '../screens/profiles_user/information_user.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
@@ -22,7 +24,7 @@ final GoRouter _router = GoRouter(
     // ),
     GoRoute(
       path: '/',
-      builder: (context, state) =>  SignUp(),
+      builder: (context, state) =>  TinderHomeScreen(),
     ),
     GoRoute(
       path: '/RegisterScreen',
@@ -67,6 +69,11 @@ final GoRouter _router = GoRouter(
       path: '/SignUp',
       builder: (context, state) => SignUp(),
     ),
+    GoRoute(
+      path: '/Information_user',
+      builder: (context, state) =>UserProfileScreen(),
+    ),
+
 
   ],
 );

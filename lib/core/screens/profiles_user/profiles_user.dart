@@ -546,21 +546,25 @@ class _ProfileCardState extends State<ProfileCard> with SingleTickerProviderStat
                     ),
                     const Spacer(),
                     // Info button
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.info_outline,
-                          color: Colors.grey,
-                          size: 18,
+                    InkWell(
+                      onTap: () => context.go('/Information_user'),
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.info_outline,
+                            color: Colors.grey,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 6),
