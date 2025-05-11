@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/core/token/border_radius_tokens.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileCardContent extends StatelessWidget {
   final double width;
@@ -27,6 +28,7 @@ class ProfileCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(photoUrl);
     return Container(
       width: width,
       height: height,
@@ -46,8 +48,13 @@ class ProfileCardContent extends StatelessWidget {
         children: [
           // Profile Image
           Positioned.fill(
-            child: Image.asset(photoUrl, fit: BoxFit.cover),
+            child: Image.network(
+              photoUrl,
+              fit: BoxFit.cover,
+
+            ),
           ),
+
 
           // Gradient overlay for better text visibility
           Positioned.fill(
@@ -75,7 +82,7 @@ class ProfileCardContent extends StatelessWidget {
             _buildOverlayLabel("NOPE", Colors.red, isLeft: true),
 
           // Profile Info at bottom of card
-          _buildProfileInfo(),
+          _buildProfileInfo(context),
         ],
       ),
     );
@@ -107,7 +114,7 @@ class ProfileCardContent extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileInfo() {
+  Widget _buildProfileInfo(BuildContext context) {
     return Positioned(
       bottom: 16,
       left: 16,
@@ -137,21 +144,27 @@ class ProfileCardContent extends StatelessWidget {
               ),
               const Spacer(),
               // Info button
-              Container(
-                width: 24,
-                height: 24,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.info_outline,
-                    color: Colors.grey,
-                    size: 18,
+              GestureDetector(
+                onTap: () {
+                  context.go('/Information_user');
+                },
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.info_outline,
+                      color: Colors.grey,
+                      size: 18,
+                    ),
                   ),
                 ),
               ),
+
             ],
           ),
           const SizedBox(height: 6),
@@ -159,7 +172,7 @@ class ProfileCardContent extends StatelessWidget {
           Row(
             children: [
               const Icon(
-                Icons.location_on,
+                Icons.transgender,
                 color: Colors.white,
                 size: 14,
               ),
@@ -176,21 +189,21 @@ class ProfileCardContent extends StatelessWidget {
           const SizedBox(height: 2),
           // Distance info
           Row(
-            children: [
-              const Icon(
-                Icons.place_outlined,
-                color: Colors.white,
-                size: 14,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                distance,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+            // children: [
+            //   const Icon(
+            //     Icons.place_outlined,
+            //     color: Colors.white,
+            //     size: 14,
+            //   ),
+            //   const SizedBox(width: 4),
+            //   Text(
+            //     distance,
+            //     style: const TextStyle(
+            //       fontSize: 14,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ],
           ),
         ],
       ),

@@ -1,9 +1,11 @@
+import 'package:app/core/screens/onbroading/add_photo_screen.dart';
 import 'package:app/models/user-profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
+import '/apis/services/profile_service.dart';
 
 import '../../theme/app_decoration.dart';
 import '../../theme/app_theme.dart';
@@ -16,6 +18,7 @@ import '../../screens/onbroading/profile_add_photo.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+  UserProfile get _userProfile => UserProfile.empty();
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -25,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentTabIndex = 0;
+  final ProfileService _profileService = ProfileService();
 
   // Create a user profile instance to store all the information
   final UserProfile _userProfile = UserProfile.empty();
@@ -34,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(
-      () => setState(() => _currentTabIndex = _tabController.index),
+          () => setState(() => _currentTabIndex = _tabController.index),
     );
   }
 
@@ -56,30 +60,48 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
   }
 
+  void _navigateToPhotoScreen() {
+    // Navigate to the PhotoTab screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: AppColors.neutralGray600),
+              onPressed: () => Navigator.pop(context),
+            ),
+            backgroundColor: AppColors.primaryWhite,
+            elevation: 0,
+          ),
+          body: PhotoTab(
+            onContinue: () {
+              Navigator.pop(context);
+              _submitProfile();
+            },
+            onPhotosChanged: (photos) => setState(() => _userProfile.photos = photos),
+            initialPhotos: _userProfile.photos,
+          ),
+        ),
+      ),
+    );
+  }
+
   // Method to submit profile data to API
   Future<void> _submitProfile() async {
-    // Check if profile is complete
-    if (!_userProfile.isComplete()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please complete your profile')),
-      );
-      return;
-    }
+
 
     try {
-      // Here you would make your API call
-      // Example:
-      // final response = await apiService.createProfile(_userProfile.toJson());
-
-      // For now, just print the data that would be sent
       print('Submitting profile: ${_userProfile.toJson()}');
 
-      // Navigate to home on success
-      context.go('/ready');
+       await _profileService.updateProfile(_userProfile);
+
+        context.go('/tinderUser');
+
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating profile: $e')),
+      );
     }
   }
 
@@ -105,9 +127,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                 child: Container(
                   height: 4,
                   color:
-                      _currentTabIndex >= index
-                          ? AppColors.redRed400
-                          : AppColors.neutralGray300,
+                  _currentTabIndex >= index
+                      ? AppColors.redRed400
+                      : AppColors.neutralGray300,
                 ),
               );
             }),
@@ -122,6 +144,12 @@ class _ProfileScreenState extends State<ProfileScreen>
             onContinue: _nextTab,
             onNameChanged:
                 (name) => setState(() => _userProfile.firstName = name),
+            initialName: _userProfile.firstName,
+          ),
+          NameTabLasName(
+            onContinue: _nextTab,
+            onNameChanged:
+                (name) => setState(() => _userProfile.lastName = name),
             initialName: _userProfile.firstName,
           ),
           BirthdayTab(
@@ -140,20 +168,86 @@ class _ProfileScreenState extends State<ProfileScreen>
             initialShowGender: _userProfile.showGender,
           ),
           InterestTab(
-            onContinue: _nextTab,
+            onContinue: _navigateToPhotoScreen,
             onInterestsChanged:
                 (interests) =>
-                    setState(() => _userProfile.interests = interests),
+                setState(() => _userProfile.interests = interests),
             initialInterests: _userProfile.interests,
           ),
-          PhotoTab(
-            onContinue: _submitProfile,
+        ],
+      ),
+    );
+  }
+}
 
-            onPhotosChanged:
-                (photos) => setState(() => _userProfile.photos = photos),
-            initialPhotos: _userProfile.photos,
+class NameTabLasName extends StatefulWidget {
+  final VoidCallback onContinue;
+  final Function(String) onNameChanged;
+  final String? initialName;
 
+  const NameTabLasName({
+    required this.onContinue,
+    required this.onNameChanged,
+    this.initialName,
+  });
+
+  @override
+  State<NameTabLasName> createState() => _NameTabLastNameState();
+}
+
+class _NameTabLastNameState extends State<NameTabLasName> {
+  late TextEditingController _nameLastController;
+  bool _isValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameLastController = TextEditingController(text: widget.initialName ?? '');
+    _validateInput(_nameLastController.text);
+
+    _nameLastController.addListener(() {
+      _validateInput(_nameLastController.text);
+      widget.onNameChanged(_nameLastController.text);
+    });
+  }
+
+  void _validateInput(String value) {
+    setState(() {
+      _isValid = value.trim().isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameLastController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(AppPaddingTokens.paddingLg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('My last\nname is', style: AppTheme.headLineLarge32),
+          const SizedBox(height: AppPaddingTokens.paddingMd),
+          TextField(
+            controller: _nameLastController,
+            decoration: const InputDecoration(
+              hintText: 'Enter your first name',
+              border: UnderlineInputBorder(),
+            ),
           ),
+          const SizedBox(height: AppPaddingTokens.paddingSm),
+          Text(
+            'This is how it will appear in Tinder and you will not be able to change it',
+            style: AppTheme.bodySmall12.copyWith(
+              color: AppColors.neutralGray600,
+            ),
+          ),
+          const Spacer(),
+          ContinueButton(enabled: _isValid, onPressed: widget.onContinue),
         ],
       ),
     );
@@ -260,9 +354,9 @@ class _BirthdayTabState extends State<BirthdayTab> {
     _selectedDate = widget.initialDate;
     _birthdayController = TextEditingController(
       text:
-          _selectedDate != null
-              ? "${_selectedDate!.year}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}"
-              : '',
+      _selectedDate != null
+          ? "${_selectedDate!.year}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.day.toString().padLeft(2, '0')}"
+          : '',
     );
 
     _birthdayController.addListener(() {
@@ -438,17 +532,17 @@ class _GenderTabState extends State<GenderTab> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration:
-                        selected == 'WOMAN'
-                            ? AppDecoration.genderSelected()
-                            : AppDecoration.genderUnselected(),
+                    selected == 'WOMAN'
+                        ? AppDecoration.genderSelected()
+                        : AppDecoration.genderUnselected(),
                     alignment: Alignment.center,
                     child: Text(
                       'WOMAN',
                       style: AppTheme.titleSmall16.copyWith(
                         color:
-                            selected == 'WOMAN'
-                                ? AppColors.primaryWhite
-                                : AppColors.primaryBlack,
+                        selected == 'WOMAN'
+                            ? AppColors.primaryWhite
+                            : AppColors.primaryBlack,
                       ),
                     ),
                   ),
@@ -464,17 +558,17 @@ class _GenderTabState extends State<GenderTab> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration:
-                        selected == 'MAN'
-                            ? AppDecoration.genderSelected()
-                            : AppDecoration.genderUnselected(),
+                    selected == 'MAN'
+                        ? AppDecoration.genderSelected()
+                        : AppDecoration.genderUnselected(),
                     alignment: Alignment.center,
                     child: Text(
                       'MAN',
                       style: AppTheme.titleSmall16.copyWith(
                         color:
-                            selected == 'MAN'
-                                ? AppColors.primaryWhite
-                                : AppColors.primaryBlack,
+                        selected == 'MAN'
+                            ? AppColors.primaryWhite
+                            : AppColors.primaryBlack,
                       ),
                     ),
                   ),
@@ -582,51 +676,51 @@ class _InterestTabState extends State<InterestTab> {
                 spacing: 10,
                 runSpacing: 10,
                 children:
-                    interests.map((interest) {
-                      final isSelected = selected.contains(interest);
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (isSelected) {
-                              selected.remove(interest);
-                            } else {
-                              selected.add(interest);
-                            }
-                          });
-                          widget.onInterestsChanged(selected.toList());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              AppBorderRadiusTokens.borderRadiusLarge,
-                            ),
-                            border: Border.all(
-                              color:
-                                  isSelected
-                                      ? AppColors.redRed500
-                                      : AppColors.neutralGray400,
-                            ),
-                            color:
-                                isSelected
-                                    ? Colors.transparent
-                                    : AppColors.neutralGray100,
-                          ),
-                          child: Text(
-                            interest,
-                            style: AppTheme.bodySmall12.copyWith(
-                              color:
-                                  isSelected
-                                      ? AppColors.redRed500
-                                      : AppColors.neutralGray800,
-                            ),
-                          ),
+                interests.map((interest) {
+                  final isSelected = selected.contains(interest);
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          selected.remove(interest);
+                        } else {
+                          selected.add(interest);
+                        }
+                      });
+                      widget.onInterestsChanged(selected.toList());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          AppBorderRadiusTokens.borderRadiusLarge,
                         ),
-                      );
-                    }).toList(),
+                        border: Border.all(
+                          color:
+                          isSelected
+                              ? AppColors.redRed500
+                              : AppColors.neutralGray400,
+                        ),
+                        color:
+                        isSelected
+                            ? Colors.transparent
+                            : AppColors.neutralGray100,
+                      ),
+                      child: Text(
+                        interest,
+                        style: AppTheme.bodySmall12.copyWith(
+                          color:
+                          isSelected
+                              ? AppColors.redRed500
+                              : AppColors.neutralGray800,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ),
@@ -634,160 +728,6 @@ class _InterestTabState extends State<InterestTab> {
           ContinueButton(
             enabled: selected.isNotEmpty,
             onPressed: widget.onContinue,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PhotoTab extends StatefulWidget {
-  final VoidCallback onContinue;
-  final Function(List<String>) onPhotosChanged;
-  final List<String> initialPhotos;
-
-  const PhotoTab({
-    super.key,
-    required this.onContinue,
-    required this.onPhotosChanged,
-    required this.initialPhotos,
-  });
-
-  @override
-  State<PhotoTab> createState() => _PhotoTabState();
-}
-
-class _PhotoTabState extends State<PhotoTab> {
-  late List<String?> photos;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize with existing photos if any, otherwise create empty slots
-    photos =
-        widget.initialPhotos.isNotEmpty
-            ? List<String?>.from(widget.initialPhotos.map((p) => p).toList())
-            : List.generate(6, (index) => null);
-
-    // If the list is shorter than 6, pad it with nulls
-    while (photos.length < 6) {
-      photos.add(null);
-    }
-  }
-
-  void _addPhoto(int index, String path) {
-    setState(() {
-      photos[index] = path;
-      _updatePhotosList();
-    });
-  }
-
-  void _removePhoto(int index) {
-    setState(() {
-      photos[index] = null;
-      _updatePhotosList();
-    });
-  }
-
-  void _updatePhotosList() {
-    final nonNullPhotos =
-        photos.where((p) => p != null).map((p) => p!).toList();
-    widget.onPhotosChanged(nonNullPhotos);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedCount = photos.where((p) => p != null).length;
-    return Padding(
-      padding: EdgeInsets.all(AppPaddingTokens.paddingLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Add photos', style: AppTheme.headLineLarge32),
-          const SizedBox(height: AppPaddingTokens.paddingMd),
-          Text(
-            'Add at least 2 photos to continue',
-            style: AppTheme.bodySmall12.copyWith(
-              color: AppColors.neutralGray600,
-            ),
-          ),
-          const SizedBox(height: AppPaddingTokens.paddingMd),
-          Expanded(
-            child: GridView.builder(
-              itemCount: 6,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemBuilder: (context, index) {
-                final imagePath = photos[index];
-                return Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          AppBorderRadiusTokens.borderRadiusMedium,
-                        ),
-                        color: AppColors.neutralGray200,
-                      ),
-                      alignment: Alignment.center,
-                      child:
-                          imagePath != null
-                              ? ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  File(imagePath),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              )
-                              : IconButton(
-                                onPressed: () {
-                                  showPhotoPickerSheet(
-                                    context,
-                                    onImagePicked:
-                                        (file) => _addPhoto(index, file.path),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.add,
-                                  color: AppColors.redRed400,
-                                ),
-                              ),
-                    ),
-                    if (imagePath != null)
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: GestureDetector(
-                          onTap: () => _removePhoto(index),
-                          child: const CircleAvatar(
-                            radius: 12,
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.close,
-                              size: 14,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: AppPaddingTokens.paddingMd),
-          ContinueButton(
-            enabled: selectedCount >= 2,
-            onPressed: () {
-              // Update photos list one final time
-              _updatePhotosList();
-              // Navigate to ready screen
-              context.go('/ready');
-            },
           ),
         ],
       ),
@@ -813,20 +753,20 @@ class ContinueButton extends StatelessWidget {
           height: 50,
           width: double.infinity,
           decoration:
-              enabled
-                  ? AppDecoration.createAccountButton()
-                  : BoxDecoration(
-                    color: AppColors.neutralGray300,
-                    borderRadius: BorderRadius.circular(
-                      AppBorderRadiusTokens.borderRadiusLarge,
-                    ),
-                  ),
+          enabled
+              ? AppDecoration.createAccountButton()
+              : BoxDecoration(
+            color: AppColors.neutralGray300,
+            borderRadius: BorderRadius.circular(
+              AppBorderRadiusTokens.borderRadiusLarge,
+            ),
+          ),
           alignment: Alignment.center,
           child: Text(
             'CONTINUE',
             style: AppTheme.titleSmall16.copyWith(
               color:
-                  enabled ? AppColors.primaryWhite : AppColors.neutralGray600,
+              enabled ? AppColors.primaryWhite : AppColors.neutralGray600,
               letterSpacing: 1.2,
             ),
           ),

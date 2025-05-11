@@ -1,4 +1,6 @@
 import 'package:app/core/screens/chat_screen.dart';
+import 'package:app/core/screens/machine_learning_demo.dart';
+import 'package:app/core/screens/onbroading/add_photo_screen.dart';
 import 'package:app/core/screens/profiles_screen_account.dart';
 import 'package:app/core/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +20,17 @@ import '../screens/profiles_user/information_user.dart';
 import '../screens/profiles_user/likeScreen.dart';
 
 import '../screens/profiles_user/searchScreen.dart';
+import '../screens/onbroading/add_photo_screen.dart';
 
 final GoRouter _router = GoRouter(
   routes: [
-    // GoRoute(
-    //   path: '/',
-    //   builder: (context, state) =>  LoginScreen(),
-    // ),
     GoRoute(
       path: '/',
-      builder: (context, state) =>  TinderHomeScreen(),
+      builder: (context, state) =>  SentimentAnalysisScreen(),
     ),
     GoRoute(
       path: '/RegisterScreen',
-      builder: (context, state) =>RegisterScreen(),
+      builder: (context, state) =>SignUp(),
     ) ,
     GoRoute(
       path: '/oops',
@@ -67,11 +66,11 @@ final GoRouter _router = GoRouter(
       path: '/ready',
       builder: (context, state) =>GetReadyScreen(),
     ),
-
     GoRoute(
       path: '/tinderUser',
       builder: (context, state) => TinderHomeScreen(),
     ),
+
     GoRoute(
       path: '/SignUp',
       builder: (context, state) => SignUp(),
@@ -80,7 +79,6 @@ final GoRouter _router = GoRouter(
       path: '/Information_user',
       builder: (context, state) =>UserProfileScreen(),
     ),
-
     GoRoute(
       path: '/likeScreen',
       builder: (context, state) =>LikesScreen(),

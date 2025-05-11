@@ -11,7 +11,7 @@ class ProfileService {
     return response;
   }
 
-  Future<Map<String, dynamic>> getProfile(String id) async {
+  Future<Map<String, dynamic>> getProfile(String? id) async {
     var response = await _apiService.get("user/$id");
 
     return response;

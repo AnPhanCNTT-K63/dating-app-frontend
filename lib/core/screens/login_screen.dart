@@ -1,4 +1,5 @@
 import 'package:app/apis/services/auth_service.dart';
+import 'package:app/apis/services/user_service.dart';
 import 'package:app/providers/user_provicer.dart';
 import 'package:app/widgets/signin_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final AuthService _authService = AuthService();
+  final UserService _userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +61,25 @@ class LoginScreen extends StatelessWidget {
                   }
                   final GoogleSignInAuthentication auth = await account.authentication;
                   final idToken = auth.idToken;
-                  final response = await _authService.loginGoogle(idToken!);
+                  await _authService.loginGoogle(idToken!);
                   final userProvider = Provider.of<UserProvider>(context, listen: false);
                   await userProvider.loadUserData();
-                  context.go('/tinderUser');
+
+                  final res = await _userService.getUserById(userProvider.id);
+                  print('User data: ${res["data"]["profile"]}');
+
+                  // Fixed conditional check for interests
+                  final profileData = res["data"]["profile"];
+                  final hasInterests = profileData != null &&
+                      profileData["interests"] != null &&
+                      profileData["interests"] is List &&
+                      (profileData["interests"] as List).isNotEmpty;
+
+                  if (!hasInterests) {
+                    context.go('/profile');
+                  } else {
+                    context.go('/tinderUser');
+                  }
                 } catch (e) {
                   print('Google Sign-In error: $e');
                 }

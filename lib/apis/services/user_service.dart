@@ -10,4 +10,10 @@ class UserService {
     return response;
   }
 
+  Future<Map<String, dynamic>> getUserById(String? id) async {
+    var response = await _apiService.get("user/$id");
+
+    return response;
+  }
+
 }

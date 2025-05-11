@@ -1,4 +1,6 @@
 import 'package:app/apis/services/chat_service.dart';
+import 'package:app/apis/services/media_service.dart';
+import 'package:app/apis/services/profile_service.dart';
 import 'package:app/apis/services/user_service.dart';
 import 'package:app/models/user-profile_model.dart';
 import 'package:app/providers/user_provicer.dart';
@@ -15,6 +17,8 @@ class ProfileCardStack extends StatefulWidget {
 class _ProfileCardStackState extends State<ProfileCardStack> with TickerProviderStateMixin {
   final UserService _userService = UserService();
   final ChatService _chatService = ChatService();
+  final ProfileService _profileService = ProfileService();
+  late String currentUserAvatar = '';
   List<dynamic> usersFromApi = [];
   late List<UserProfile> users = [];
   late String conversationId;
@@ -48,17 +52,21 @@ class _ProfileCardStackState extends State<ProfileCardStack> with TickerProvider
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final currentUserId = userProvider.id;
 
+      // Get all users
       final response = await _userService.getAllUsers();
 
       setState(() {
+        // Filter out the current user
         usersFromApi = response["data"].where((userData) =>
         userData["_id"] != currentUserId
         ).toList();
 
+        // Create UserProfile objects from the API data
         users = usersFromApi.map<UserProfile>((userData) =>
             UserProfile.fromApiData(userData)
         ).toList();
 
+        // Generate unique keys for each card
         cardKeys = List.generate(users.length, (index) => UniqueKey());
       });
 
@@ -179,15 +187,23 @@ class _ProfileCardStackState extends State<ProfileCardStack> with TickerProvider
     int currentUserIndex = currentIndex % users.length;
     UserProfile currentUser = users[currentUserIndex];
 
+    // Get the avatar URL from the original API data
+    String avatarUrl = '';
+    if (currentUserIndex < usersFromApi.length &&
+        usersFromApi[currentUserIndex]["profile"] != null &&
+        usersFromApi[currentUserIndex]["profile"]["avatar"] != null) {
+      avatarUrl = usersFromApi[currentUserIndex]["profile"]["avatar"]["filePath"];
+    }
+
     cards.add(
         Positioned.fill(
           child: ProfileCard(
             key: cardKeys[currentUserIndex],
             name: currentUser.name,
             age: currentUser.age ?? 0,
-            location: currentUser.location ?? "Unknown location",
+            location: currentUser.gender ?? "Unknown location",
             distance: currentUser.distance ?? "Unknown distance",
-            photoUrl: currentUser.photoUrl,
+            photoUrl: avatarUrl, // Use the correctly extracted avatar URL
             onSwipeRight: nextProfile,
             onSwipeLeft: nextProfile,
             isTopCard: true,
@@ -205,6 +221,14 @@ class _ProfileCardStackState extends State<ProfileCardStack> with TickerProvider
       int nextUserIndex = (currentIndex + 1) % users.length;
       UserProfile nextUser = users[nextUserIndex];
 
+      // Get the next avatar URL from the original API data
+      String nextAvatarUrl = '';
+      if (nextUserIndex < usersFromApi.length &&
+          usersFromApi[nextUserIndex]["profile"] != null &&
+          usersFromApi[nextUserIndex]["profile"]["avatar"] != null) {
+        nextAvatarUrl = usersFromApi[nextUserIndex]["profile"]["avatar"]["filePath"];
+      }
+
       cards.add(
           Positioned.fill(
             child: AnimatedBuilder(
@@ -218,7 +242,7 @@ class _ProfileCardStackState extends State<ProfileCardStack> with TickerProvider
                     age: nextUser.age ?? 0,
                     location: nextUser.location ?? "Unknown location",
                     distance: nextUser.distance ?? "Unknown distance",
-                    photoUrl: nextUser.photoUrl,
+                    photoUrl: nextAvatarUrl, // Use the correctly extracted avatar URL
                     onSwipeRight: () {},
                     // No action for background card
                     onSwipeLeft: () {},

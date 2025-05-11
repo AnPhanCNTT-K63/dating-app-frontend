@@ -37,7 +37,7 @@ class CustomBottomNavBar extends StatelessWidget {
         // Điều hướng trang khi ấn vào các item trong BottomNavigationBar
         switch (index) {
           case 0:
-            context.go('/home'); // Chuyển tới trang Home
+            context.go('/tinderUser'); // Chuyển tới trang Home
             break;
           case 1:
             context.go('/DiscoveryScreen'); // Chuyển tới trang DiscoveryScreen
@@ -62,7 +62,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
         ),
         BottomNavigationBarItem(
-          icon: _buildColoredIcon(AppIcons.Union(width: 24, height: 24), selectedIndex == 1),
+          icon: _buildColoredIcon(AppIcons.Search(width: 24, height: 24), selectedIndex == 1),
           label: '',
         ),
         BottomNavigationBarItem(
@@ -70,7 +70,7 @@ class CustomBottomNavBar extends StatelessWidget {
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: _buildColoredIcon(AppIcons.Search(width: 24, height: 24), selectedIndex == 3),
+          icon: _buildColoredIcon(AppIcons.Union(width: 24, height: 24), selectedIndex == 3),
           label: '',
         ),
         BottomNavigationBarItem(

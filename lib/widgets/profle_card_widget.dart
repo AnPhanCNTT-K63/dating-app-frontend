@@ -32,6 +32,7 @@ class ProfileCard extends StatefulWidget {
 }
 
 class _ProfileCardState extends State<ProfileCard> with SingleTickerProviderStateMixin {
+
   // Card state variables
   double _dragPosition = 0.0;
   bool _isDragging = false;

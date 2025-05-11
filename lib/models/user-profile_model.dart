@@ -117,6 +117,15 @@ class UserProfile {
     }
   }
 
+  set photoUrl(String url) {
+    if (photos.isEmpty) {
+      photos.add(url);
+    } else {
+      photos[0] = url;
+    }
+  }
+
+
   // Get photo URL for the profile card
   String get photoUrl {
     if (photos.isNotEmpty) {
