@@ -1,6 +1,7 @@
 import 'package:app/core/screens/chat_screen.dart';
 import 'package:app/core/screens/machine_learning_demo.dart';
 import 'package:app/core/screens/onbroading/add_photo_screen.dart';
+import 'package:app/core/screens/payment_screen.dart';
 import 'package:app/core/screens/profiles_screen_account.dart';
 import 'package:app/core/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,11 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) =>  SentimentAnalysisScreen(),
+      builder: (context, state) =>  PayScreen(),
+    ),
+    GoRoute(
+      path: '/pay',
+      builder: (context, state) =>  PayScreen(),
     ),
     GoRoute(
       path: '/RegisterScreen',

@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
   final Dio dio = Dio(BaseOptions(
-    baseUrl: dotenv.env['API_URL_PROD'] ?? "http://10.0.2.2:3000/api/",
+    baseUrl: dotenv.env['API_URL_DEV'] ?? "http://10.0.2.2:3000/api/",
     // API_URL_DEV  cho backend dev chạy trên desktop
     // API_URL_PROD  cho frontend dev chạy trên mọi thiết bị
     // API_URL_LOCAL cho backend dev chay điện thoại
