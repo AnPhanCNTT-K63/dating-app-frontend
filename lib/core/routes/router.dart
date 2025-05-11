@@ -22,6 +22,9 @@ import '../screens/profiles_user/likeScreen.dart';
 import '../screens/profiles_user/searchScreen.dart';
 import '../screens/onbroading/add_photo_screen.dart';
 
+import '../screens/profiles_user/loadingScreen.dart';
+
+
 final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
@@ -87,6 +90,15 @@ final GoRouter _router = GoRouter(
       path: '/DiscoveryScreen',
       builder: (context, state) =>DiscoveryScreen(),
     ),
+
+    GoRoute(
+      path: '/DiscoveryScreen',
+      builder: (context, state) =>DiscoveryScreen(),
+    ),
+    GoRoute(
+      path: '/loading',
+      builder: (context, state) =>SearchingLoadingWidget(),
+    )
 
   ],
 );
